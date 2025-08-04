@@ -2,6 +2,9 @@ const { quotes,advices } = require("../data/data");
 
 const qoutesData = quotes;
 const advicesData = advices;
+
+const allData = [...qoutesData, ...advicesData];
+
 let start = 0;
 const getGenerates = (req, res) => {
   const { query } = req;
@@ -27,7 +30,16 @@ const getGenerates = (req, res) => {
       data: advicesData[start],
     });
   }
-  console.log("🚀 ~ getGenerates ~ query:", query);
+
+  const randomIndex = Math.floor(Math.random() * allData.length);
+  if (query.type == "random") {
+    return res.json({
+      status: "success",
+      code: 201,
+      data: allData[randomIndex],
+    });
+  }
+
   return res.json({
     status: "success",
     code: 201,
