@@ -300,5 +300,38 @@ const advices = [
   { id: 100, text: "Don’t be afraid to live your life.", author: "Unknown", type: "advice" }
 ];
 
-module.exports = { quotes, advices };
+const jokes = [
+  { id: 1, text: "Why don't scientists trust atoms? Because they make up everything!", author: "unknown", type: "joke" },
+  { id: 2, text: "Did you hear about the mathematician who's afraid of negative numbers? He'll stop at nothing to avoid them.", author: "unknown", type: "joke" },
+  { id: 3, text: "Why don't skeletons fight each other? They don't have the guts.", author: "unknown", type: "joke" },
+  { id: 4, text: "I told my wife she was drawing her eyebrows too high. She looked surprised.", author: "unknown", type: "joke" },
+  { id: 5, text: "What do you call a fake noodle? An impasta!", author: "unknown", type: "joke" },
+  { id: 6, text: "How do you organize a space party? You planet!", author: "unknown", type: "joke" },
+  { id: 7, text: "Why did the scarecrow win an award? Because he was outstanding in his field!", author: "unknown", type: "joke" },
+  { id: 8, text: "I'm reading a book about anti-gravity. It's impossible to put down!", author: "unknown", type: "joke" },
+  { id: 9, text: "Did you hear about the claustrophobic astronaut? He just needed a little space.", author: "unknown", type: "joke" },
+  { id: 10, text: "Why don't eggs tell jokes? They'd crack each other up.", author: "unknown", type: "joke" },
+  { id: 11, text: "I used to be a baker because I kneaded dough.", author: "unknown", type: "joke" },
+  { id: 12, text: "What's the best thing about Switzerland? I don't know, but the flag is a big plus.", author: "unknown", type: "joke" },
+  { id: 13, text: "How do you make a tissue dance? Put a little boogie in it!", author: "unknown", type: "joke" },
+  { id: 14, text: "Why did the bicycle fall over? Because it was two-tired!", author: "unknown", type: "joke" },
+  { id: 15, text: "What do you call a bear with no teeth? A gummy bear!", author: "unknown", type: "joke" },
+  { id: 16, text: "I wouldn't buy anything with velcro. It's a total rip-off.", author: "unknown", type: "joke" },
+  { id: 17, text: "What's orange and sounds like a parrot? A carrot.", author: "unknown", type: "joke" },
+  { id: 18, text: "How many tickles does it take to make an octopus laugh? Ten-tickles.", author: "unknown", type: "joke" },
+  { id: 19, text: "I'm on a seafood diet. Every time I see food, I eat it.", author: "unknown", type: "joke" },
+  { id: 20, text: "What do you call a snowman with a six-pack? An abdominal snowman.", author: "unknown", type: "joke" },
+  { id: 21, text: "Why did the golfer bring two pairs of pants? In case he got a hole in one!", author: "unknown", type: "joke" },
+  { id: 22, text: "I invented a new word: Plagiarism!", author: "unknown", type: "joke" },
+  { id: 23, text: "Hear about the new restaurant called Karma? There's no menu - you get what you deserve.", author: "unknown", type: "joke" },
+  { id: 24, text: "A man tells his doctor, 'Doc, help me. I'm addicted to Twitter!' The doctor replies, 'Sorry, I don't follow you...'", author: "unknown", type: "joke" },
+  { id: 25, text: "What's the difference between a poorly dressed man on a trampoline and a well-dressed man on a trampoline? Attire.", author: "unknown", type: "joke" },
+  { id: 26, text: "Why don't scientists trust atoms? Because they make up everything!", author: "Mitch Hedberg", type: "joke" },
+  { id: 27, text: "I'm reading a book about anti-gravity. It's impossible to put down!", author: "Steven Wright", type: "joke" },
+  { id: 28, text: "Parallel lines have so much in common. It's a shame they'll never meet.", author: "unknown", type: "joke" },
+  { id: 29, text: "I told my wife she was drawing her eyebrows too high. She looked surprised.", author: "Rodney Dangerfield", type: "joke" },
+  { id: 30, text: "What's the best thing about Switzerland? I don't know, but the flag is a big plus.", author: "unknown", type: "joke" }
+];
+
+module.exports = { quotes, advices,jokes };
 

@@ -1,9 +1,10 @@
-const { quotes,advices } = require("../data/data");
+const { quotes,advices,jokes } = require("../data/data");
 
 const qoutesData = quotes;
 const advicesData = advices;
+const jokesData = jokes;
 
-const allData = [...qoutesData, ...advicesData];
+const allData = [...qoutesData, ...advicesData, ...jokesData];
 
 let start = 0;
 const getGenerates = (req, res) => {
@@ -30,6 +31,21 @@ const getGenerates = (req, res) => {
       data: advicesData[start],
     });
   }
+  
+  
+  // jokes
+  if (query.type == "joke") {
+    start += 1;
+    if (start > jokesData.length - 1) {
+      start = 0;
+    }
+    return res.json({
+      status: "success",
+      code: 201,
+      data: jokesData[start],
+    });
+  }
+
 
   const randomIndex = Math.floor(Math.random() * allData.length);
   if (query.type == "random") {
@@ -39,6 +55,8 @@ const getGenerates = (req, res) => {
       data: allData[randomIndex],
     });
   }
+
+
 
   return res.json({
     status: "success",
