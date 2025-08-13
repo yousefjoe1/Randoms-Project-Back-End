@@ -20,8 +20,10 @@ mongoose.connect(url).then(() => {
 
 const userRouter = require("./routes/users.route");
 const generateRouter = require("./routes/generates.route");
+const submitRouter = require("./routes/submit.route");
 app.use("/api", userRouter);
 app.use("/api", generateRouter);
+app.use("/api", submitRouter);
 
 server.listen(4000, () => {
   console.log("server running");

@@ -46,7 +46,7 @@ const addUser = async (req, res) => {
       password: hashedPassword,
     });
     const token = jwt.sign(
-      { password: password, email: email },
+      { password: password, email: email,id: newUser._id },
       process.env.S_key
     );
 
@@ -78,7 +78,7 @@ const loginUser = async (req, res) => {
       data: null,
       code: 400,
       errros: valid.array(),
-      msg: "خطأ فى التسجيل - راجع المعلومات جيدا",
+      msg: "Registration error - Please check your information carefully",
     });
   }
   const { email, password } = req.body;
@@ -90,7 +90,7 @@ const loginUser = async (req, res) => {
       status: "error",
       data: null,
       code: 400,
-      msg: "معلومات غير صحيحة",
+      msg: "Invalid credentials",
     });
   }
 
@@ -99,7 +99,7 @@ const loginUser = async (req, res) => {
       status: "error",
       data: null,
       code: 400,
-      msg: "لازم تكتب كل حاجة",
+      msg: "You must enter all required fields",
     });
   }
 
@@ -107,14 +107,14 @@ const loginUser = async (req, res) => {
     const matchedPassword = await bcrypt.compare(password, user.password);
     if (user && matchedPassword) {
       const token = jwt.sign(
-        { password: password, email: email },
+        { password: password, email: email, id: user._id },
         process.env.S_key
       );
       return res.json({
         status: "success",
         data: user,
         code: 201,
-        msg: "تم الدخول",
+        msg: "Login successful",
         token: token,
       });
     } else {
@@ -122,7 +122,7 @@ const loginUser = async (req, res) => {
         status: "error",
         data: null,
         code: 400,
-        msg: "الايميل او الباسورد مش صح",
+        msg: "Email or password is incorrect",
       });
     }
   } catch (er) {
