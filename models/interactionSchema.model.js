@@ -6,6 +6,10 @@ const interactionSchema = new mongoose.Schema({
       ref: 'User', 
       required: true 
     },
+    itemContent: {
+      text: { type: String},
+      author: { type: String }
+    },
     contentId: { 
       type: Number, 
       required: true  // References your static content's ID
@@ -13,7 +17,7 @@ const interactionSchema = new mongoose.Schema({
     contentType: { 
       type: String, 
       required: true, 
-      enum: ['quote', 'advice', 'other'] 
+      enum: ['quote', 'advice', 'joke'] 
     },
     // Track both types of interactions
     isFavorite: { 
@@ -34,6 +38,6 @@ const interactionSchema = new mongoose.Schema({
   }, { timestamps: true });
   
   // Compound index for efficient queries
-  interactionSchema.index({ user: 1, contentId: 1 }, { unique: true });
+  interactionSchema.index({ user: 1, contentId: 1, contentType: 1 }, { unique: true });
 
 module.exports = mongoose.model('interaction', interactionSchema);

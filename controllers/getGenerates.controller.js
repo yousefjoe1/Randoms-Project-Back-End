@@ -6,7 +6,7 @@ const app = express();
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
-const { quotes,advices,jokes } = require("../data/data");
+const { quotes, advices, jokes } = require("../data/data");
 
 const qoutesData = quotes;
 const advicesData = advices;
@@ -41,32 +41,38 @@ const getGenerates = async (req, res) => {
 
   const userDetails = jwt.verify(token, process.env.S_key);
 
-  
   const { query } = req;
   if (query.type == "quote") {
     start += 1;
     if (start > qoutesData.length - 1) {
       start = 0;
     }
-    const findeItem = await Interactions.findOne({user: userDetails.id, contentId :start, contentType: "quote"});
-    if(findeItem == null) {
-      const currentItem = {...qoutesData[start],isFavorite: true,
-        isLiked: false,};
+    const findeItem = await Interactions.findOne({
+      user: userDetails.id,
+      contentId: start,
+      contentType: "quote",
+    });
+
+    if (findeItem == null) {
+      const currentItem = {
+        ...qoutesData[start],
+        isFavorite: false,
+        isLiked: false,
+      };
       return res.json({
+        msg: "successfully added to favorite",
+        status: "success",
         code: 201,
         data: currentItem,
       });
-
-    }else {
-      
+    } else {
       return res.json({
         status: "success",
+        msg: "already added to favorite",
         code: 201,
-        data: {...qoutesData[start],isFavorite: false,
-          isLiked: false,},
+        data: { ...qoutesData[start], isFavorite: true, isLiked: false },
       });
     }
-    console.log("🚀 ~ getGenerates ~ fia:", fia)
   }
   if (query.type == "advice") {
     start += 1;
@@ -79,8 +85,7 @@ const getGenerates = async (req, res) => {
       data: advicesData[start],
     });
   }
-  
-  
+
   // jokes
   if (query.type == "joke") {
     start += 1;
@@ -94,7 +99,6 @@ const getGenerates = async (req, res) => {
     });
   }
 
-
   const randomIndex = Math.floor(Math.random() * allData.length);
   if (query.type == "random") {
     return res.json({
@@ -104,8 +108,6 @@ const getGenerates = async (req, res) => {
     });
   }
 
-
-
   return res.json({
     status: "success",
     code: 201,
@@ -113,6 +115,66 @@ const getGenerates = async (req, res) => {
   });
 };
 
+const getDataByType = async (req, res) => {
+  const auth = req.headers["Authorization"] || req.headers["authorization"];
+
+  if (auth == undefined) {
+    return res.json({
+      status: "error",
+      data: null,
+      code: 400,
+      msg: "Token required",
+    });
+  }
+  const token = auth.split(" ")[1];
+
+  if (token == undefined) {
+    return res.json({
+      status: "error",
+      data: null,
+      code: 400,
+      msg: "Token required",
+    });
+  }
+
+  let userId;
+  try {
+    const userDetails = jwt.verify(token, process.env.S_key);
+    userId = userDetails.id;
+  } catch (err) {
+    return res.json({
+      status: "error",
+      data: null,
+      code: 400,
+      msg: "Invalid or expired token",
+    });
+  }
+  const { type, page } = req.query;
+
+  const userFavorites = await Interactions.find({
+    user: userId,
+  });
+
+  const favorites = userFavorites.map((item) => {
+    const i = {
+      itemContent: { text: item.itemContent.text, author: item.itemContent.author },
+      contentId: item.contentId,
+      contentType: item.contentType,
+      isFavorite: item.isFavorite,
+      isLiked: item.isLiked,
+      id: item._id
+    };
+    return i;
+  });
+
+  return res.json({
+    status: "success",
+    code: 201,
+    data: favorites,
+  });
+};
+
 module.exports = {
   getGenerates,
+  getDataByType,
 };
