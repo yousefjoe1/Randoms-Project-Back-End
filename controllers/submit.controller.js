@@ -9,11 +9,8 @@ app.use(bodyParser.json());
 const { quotes, advices, jokes } = require("../data/data");
 
 const qoutesData = quotes;
-const advicesData = advices;
-const jokesData = jokes;
 
 const Interactions = require("../models/interactionSchema.model");
-const usersModel = require("../models/users.model");
 
 const addToFavorite = async (req, res) => {
   const auth = req.headers["Authorization"] || req.headers["authorization"];
@@ -58,8 +55,7 @@ const addToFavorite = async (req, res) => {
     contentType: type,
   });
 
-  let theItem = {};
-
+  let theItem = [];
   if (type == "quote") {
     theItem = qoutesData.filter((item) => item.id === id)[0];
   } else if (type == "advice") {
@@ -68,23 +64,37 @@ const addToFavorite = async (req, res) => {
     theItem = jokes.filter((item) => item.id === id)[0];
   }
 
-  if (!existing) {
-    const resp = await Interactions.create({
-      user: userId,
-      contentId: id,
-      itemContent: theItem,
-      contentType: type,
-      isFavorite: true,
-      favoritedAt: new Date(),
-    });
+  const newItems = { text: theItem.text, author: theItem.author };
 
-    return res.json({
-      isFavorite: resp.isFavorite,
-      status: "success",
-      data: null,
-      code: 200,
-      msg: "Added to favorites",
-    });
+  if (existing == null) {
+    try {
+      // Use findOneAndUpdate with upsert
+      const resp = await Interactions.create({
+        user: userId,
+        contentId: id,
+        contentType: type,
+        itemContent: newItems,
+        isFavorite: true,
+        likedAt: new Date(),
+      });
+
+      return res.json({
+        isFavorite: resp.isFavorite,
+        status: "success",
+        data: null,
+        code: 200,
+        msg: "Added to favorites",
+      });
+    } catch (err) {
+      console.log("🚀 ~ addToFavorite ~ err:", err);
+      return res.json({
+        isFavorite: false,
+        status: "success",
+        data: null,
+        code: 400,
+        msg: "Error to favorites",
+      });
+    }
   } else {
     const newFavoriteStatus = existing.isFavorite;
     const resp = await Interactions.findOneAndUpdate(
@@ -97,8 +107,7 @@ const addToFavorite = async (req, res) => {
       {
         isFavorite: !newFavoriteStatus,
         favoritedAt: new Date(),
-      },
-      { new: true }
+      }
     );
 
     return res.json({
@@ -106,7 +115,7 @@ const addToFavorite = async (req, res) => {
       data: null,
       code: 200,
       msg: "Updated favorite status",
-      isFavorite: !newFavoriteStatus,
+      isFavorite: resp.isFavorite,
     });
   }
 };

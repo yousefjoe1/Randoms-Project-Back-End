@@ -154,6 +154,8 @@ const getDataByType = async (req, res) => {
   const userFavorites = await Interactions.find({
     user: userId,
   });
+  const totalCount = userFavorites.length;
+
 
   const favorites = userFavorites.map((item) => {
     const i = {
@@ -166,11 +168,12 @@ const getDataByType = async (req, res) => {
     };
     return i;
   });
+  const clicedData = favorites.slice(0,page);
 
   return res.json({
     status: "success",
     code: 201,
-    data: favorites,
+    data: {data: clicedData, totalCount: totalCount},
   });
 };
 
